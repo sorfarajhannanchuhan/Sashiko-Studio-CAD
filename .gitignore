@@ -19,6 +19,7 @@ lerna-debug.log*
 # Test artifacts and scratch dumps
 test_screenshots/
 scratch/
+patterns_input/
 coverage/
 *.lcov
 
