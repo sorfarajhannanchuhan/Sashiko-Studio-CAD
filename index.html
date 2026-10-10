@@ -1,0 +1,1269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sashiko Studio CAD | Professional Textile Vector &amp; Lightbox Suite</title>
+  <link rel="stylesheet" href="src/styles/studio-theme.css">
+  <link rel="stylesheet" href="src/styles/canvas-viewport.css">
+  <link rel="stylesheet" href="src/styles/inspector-panel.css">
+</head>
+<body class="studio-app theme-dark">
+  <!-- Top App Navigation & File Tabs Bar (Illustrator Style - Image 3) -->
+  <header class="app-header">
+    <div class="header-left">
+      <div class="app-logo">
+        <span class="logo-mark">刺</span>
+        <span class="logo-text">SASHIKO<span class="logo-cad">CAD</span></span>
+      </div>
+
+      <!-- Multi-Canvas Document Tabs (Illustrator / Excel Style - Image 3) -->
+      <nav class="project-tabs-bar" id="project-tabs-bar">
+        <button class="project-tab active" data-tab-id="tab-main">
+          <span class="tab-title">Untitled-1 @ 50% (18" × 18")</span>
+          <span class="tab-close" title="Close Tab">✕</span>
+        </button>
+        <button class="btn-new-tab" id="btn-add-tab" title="New Canvas / Project (+)">+</button>
+      </nav>
+    </div>
+
+    <!-- Right: Streamlined Essential Actions + Settings Popover -->
+    <div class="header-right">
+      <!-- 1. Canvas Size Preset & Custom Dropdown -->
+      <div class="canvas-size-dropdown-wrapper" id="canvas-size-wrapper">
+        <button class="size-dropdown-trigger" id="btn-size-dropdown-trigger" title="Select Canvas Size (16×16, 18×18, 20×20, Custom)">
+          <svg class="size-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="3" y="3" width="18" height="18" rx="2" stroke-dasharray="3 3"/>
+            <path d="M3 9h18M9 21V3"/>
+          </svg>
+          <span class="current-size-name" id="current-size-display">Free Canvas</span>
+          <svg class="chevron-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+
+        <!-- Dropdown Popover Menu -->
+        <div class="canvas-size-menu hidden" id="canvas-size-menu">
+          <div class="size-menu-header">
+            <span class="size-menu-title">Canvas &amp; Work Area Size</span>
+            <span class="size-menu-sub">Auto-centered on Infinite Grid</span>
+          </div>
+
+          <!-- Standard Presets -->
+          <div class="size-presets-grid">
+            <button class="size-preset-btn active" id="btn-size-free" data-size="free" data-label="Free Canvas">
+              <span class="preset-name">✨ Free Canvas</span>
+              <span class="preset-dim">Infinite Grid (No Bounds)</span>
+              <span class="preset-badge">Default</span>
+            </button>
+            <button class="size-preset-btn" data-size="16x16" data-w="16" data-h="16" data-label='16" × 16"'>
+              <span class="preset-name">16" × 16"</span>
+              <span class="preset-dim">406 × 406 mm</span>
+            </button>
+            <button class="size-preset-btn" data-size="18x18" data-w="18" data-h="18" data-label='18" × 18"'>
+              <span class="preset-name">18" × 18"</span>
+              <span class="preset-dim">457 × 457 mm</span>
+              <span class="preset-badge">Cushion</span>
+            </button>
+            <button class="size-preset-btn" data-size="20x20" data-w="20" data-h="20" data-label='20" × 20"'>
+              <span class="preset-name">20" × 20"</span>
+              <span class="preset-dim">508 × 508 mm</span>
+            </button>
+            <button class="size-preset-btn" data-size="A2" data-w="16.54" data-h="23.39" data-label="A2 (CAD)">
+              <span class="preset-name">A2 Sheet</span>
+              <span class="preset-dim">420 × 594 mm</span>
+            </button>
+          </div>
+
+          <div class="size-menu-divider"></div>
+
+          <!-- Custom Dimensions Form -->
+          <div class="custom-size-section">
+            <div class="custom-size-title">Custom Dimensions (Inches)</div>
+            <div class="custom-size-inputs">
+              <div class="custom-input-group">
+                <span class="input-prefix">W:</span>
+                <input type="number" id="input-custom-w" min="4" max="120" step="0.5" value="16" placeholder="16">
+                <span class="input-suffix">in</span>
+              </div>
+              <span class="size-x-sep">×</span>
+              <div class="custom-input-group">
+                <span class="input-prefix">H:</span>
+                <input type="number" id="input-custom-h" min="4" max="120" step="0.5" value="20" placeholder="20">
+                <span class="input-suffix">in</span>
+              </div>
+            </div>
+            <button class="btn-apply-custom-size" id="btn-apply-custom-size">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+              Apply Custom Size
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2. Project File Operations: Open & Save to Device Storage -->
+      <div class="header-file-group">
+        <button class="pill-btn header-action-btn" id="btn-header-open" title="Open .sashiko Project File (Ctrl+O)">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/>
+          </svg>
+          <span class="btn-label">Open</span>
+        </button>
+        <input type="file" id="input-open-sashiko" accept=".sashiko,.json" style="display:none;">
+
+        <button class="pill-btn header-action-btn" id="btn-header-save" title="Save Project File to Device Storage (Ctrl+S)">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/>
+            <polyline points="17 21 17 13 7 13 7 21"/>
+            <polyline points="7 3 7 8 15 8"/>
+          </svg>
+          <span class="btn-label">Save</span>
+        </button>
+      </div>
+
+      <div class="divider-v"></div>
+
+      <!-- 3. Undo / Redo History -->
+      <div class="header-history-group">
+        <button class="btn-icon" id="btn-undo" title="Undo (Ctrl+Z)">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M3 7v6h6"/><path d="M21 17a9 9 0 00-9-9 9 9 0 00-6 2.3L3 13"/></svg>
+        </button>
+        <button class="btn-icon" id="btn-redo" title="Redo (Ctrl+Y)">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 7v6h-6"/><path d="M3 17a9 9 0 019-9 9 9 0 016 2.3l3 2.7"/></svg>
+        </button>
+      </div>
+
+      <!-- 4. Save Status Badge -->
+      <span class="save-status-badge" id="save-status-badge">● Saved</span>
+
+      <!-- 5. Tracing Lightbox Launch Button -->
+      <button class="btn-lightbox-launch" id="btn-enter-artlab" title="Art Lab: Screen Tracing, Hardware Scale &amp; Lightbox">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 3v18M3 12h18"/></svg>
+        <span>LIGHTBOX</span>
+      </button>
+
+      <!-- 6. Settings Dropdown (⚙️ Icon) -->
+      <div class="settings-dropdown-wrapper" id="settings-dropdown-wrapper">
+        <button class="btn-icon" id="btn-settings-trigger" title="CAD Preferences &amp; Settings">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="3"/>
+            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+          </svg>
+        </button>
+
+        <!-- Settings Popover Menu -->
+        <div class="settings-dropdown-menu hidden" id="settings-dropdown-menu">
+          <div class="settings-menu-header">
+            <span class="settings-menu-title">SETTINGS &amp; PREFERENCES</span>
+          </div>
+
+          <!-- Section A: Theme / Appearance -->
+          <div class="settings-section">
+            <div class="settings-section-title">APPEARANCE</div>
+            <button class="settings-menu-item" id="btn-theme-toggle" title="Switch Theme: Dark (Obsidian) / Light (Clean Paper)">
+              <div class="settings-item-label">
+                <span class="theme-icon-indicator">🌙</span>
+                <span id="theme-mode-text">Dark Mode</span>
+              </div>
+              <span class="settings-item-badge" id="theme-mode-badge">Obsidian</span>
+            </button>
+          </div>
+
+          <div class="settings-menu-divider"></div>
+
+          <!-- Section B: Pen Stitch Line Style -->
+          <div class="settings-section">
+            <div class="settings-section-title">PEN STITCH LINE STYLE</div>
+            <div class="settings-pill-row" id="pen-line-style-group" role="group" aria-label="Pen Line Style">
+              <button class="settings-choice-btn active" id="btn-line-style-sashiko" data-style="dashed">
+                <span>┄ Sashiko (Dashed)</span>
+              </button>
+              <button class="settings-choice-btn" id="btn-line-style-solid" data-style="solid">
+                <span>─ Solid Vector</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="settings-menu-divider"></div>
+
+          <!-- Section C: Viewport & Quadrant Tracing Modes -->
+          <div class="settings-section">
+            <div class="settings-section-title">CANVAS TRACING VIEW</div>
+            <div class="settings-pill-row" role="group" aria-label="Quadrant Split">
+              <button class="settings-choice-btn active" id="btn-quad-full" title="100% Full View">100% Full View</button>
+              <button class="settings-choice-btn" id="btn-quad-split" title="25% Quadrant Tracing (Q1-Q4)">25% Quadrant</button>
+            </div>
+            <div class="quad-pills hidden" id="quad-sub-pills">
+              <button class="q-btn active" data-quad="1">Q1</button>
+              <button class="q-btn" data-quad="2">Q2</button>
+              <button class="q-btn" data-quad="3">Q3</button>
+              <button class="q-btn" data-quad="4">Q4</button>
+            </div>
+          </div>
+
+          <div class="settings-menu-divider"></div>
+
+          <!-- Section D: AutoSave & Storage Management -->
+          <div class="settings-section">
+            <div class="settings-section-title">STORAGE &amp; AUTOSAVE</div>
+            <div class="settings-toggle-row">
+              <div class="settings-toggle-text">
+                <span class="settings-toggle-main">Crash-Proof AutoSave</span>
+                <span class="settings-toggle-sub" id="storage-usage-display">Local storage backup: active</span>
+              </div>
+              <label class="settings-switch">
+                <input type="checkbox" id="toggle-autosave-setting" checked>
+                <span class="switch-slider"></span>
+              </label>
+            </div>
+            <button class="btn-secondary btn-xs w-100 mt-1" id="btn-clear-autosave-storage" title="Clear cached auto-save from browser memory">
+              🗑️ Clear Cached Storage
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main CAD Studio Workspace -->
+  <div class="app-workspace">
+    <!-- Left Vertical Toolbar (Figma / Adobe Illustrator Standard) -->
+    <aside class="left-palette" id="left-palette">
+      <!-- Toolbar Header -->
+      <div class="toolbar-collapse-header" title="Collapse / Expand Tools">
+        <span class="collapse-icon">«</span>
+      </div>
+
+      <!-- Group: SELECTION -->
+      <div class="toolbar-section">
+        <button class="tool-icon-btn active" id="tool-select" data-tool="select" title="Select (V)">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 3l7.07 16.97 2.51-7.39 7.39-2.51L3 3z"/>
+          </svg>
+        </button>
+        <button class="tool-icon-btn" id="tool-direct-select" data-tool="direct-select" title="Direct Select (A)">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M4 4l6.5 15.5 2.5-6.5 6.5-2.5L4 4z"/>
+            <circle cx="17.5" cy="17.5" r="2.2" fill="currentColor"/>
+          </svg>
+        </button>
+      </div>
+
+      <div class="palette-divider"></div>
+
+      <!-- Group: SHAPES & SLICING -->
+      <div class="toolbar-section">
+        <button class="tool-icon-btn" id="tool-rect" data-tool="shape-rect" title="Lab Shape (M)">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="3" width="18" height="18" rx="3"/>
+            <path d="M3 9h18M9 3v18" stroke-dasharray="2 2" stroke-opacity="0.5"/>
+          </svg>
+        </button>
+        <button class="tool-icon-btn" id="tool-slicer" data-tool="slicer" title="Rotary Knife (S)">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="6.5" cy="6.5" r="3.5"/>
+            <path d="M9 9l11 11"/>
+            <path d="M15 15l4-1 1-4"/>
+          </svg>
+        </button>
+      </div>
+
+      <div class="palette-divider"></div>
+
+      <!-- Group: DRAW & TRACE -->
+      <div class="toolbar-section">
+        <button class="tool-icon-btn" id="tool-pen" data-tool="pen" title="Pen (P)">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 19l7-7 3 3-7 7-3-3z"/>
+            <path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18"/>
+            <circle cx="11" cy="11" r="1.5" fill="currentColor"/>
+          </svg>
+        </button>
+        <button class="tool-icon-btn" id="tool-arc" data-tool="arc" title="3-Point Arc (C)">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M4 19A15 15 0 0 1 19 4"/>
+            <circle cx="4" cy="19" r="2.2" fill="currentColor"/>
+            <circle cx="11.5" cy="8.5" r="2.2" fill="currentColor"/>
+            <circle cx="19" cy="4" r="2.2" fill="currentColor"/>
+          </svg>
+        </button>
+        <button class="tool-icon-btn" id="tool-curve" data-tool="curve" title="Curvature Spline (Shift+C)">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 17c4-8 8-12 12-8s4 12 6 2"/>
+            <circle cx="3" cy="17" r="2" fill="currentColor"/>
+            <circle cx="15" cy="9" r="2" fill="currentColor"/>
+            <circle cx="21" cy="11" r="2" fill="currentColor"/>
+          </svg>
+        </button>
+        <button class="tool-icon-btn" id="tool-eraser" data-tool="eraser" title="Eraser (E)">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M7 21L2.7 16.7c-1-1-1-2.6 0-3.5L13 3c1-1 2.6-1 3.5 0l4.8 4.8c1 1 1 2.6 0 3.5L11 21"/>
+            <path d="M22 21H7"/>
+            <path d="M6 12l8 8"/>
+          </svg>
+        </button>
+        <button class="tool-icon-btn" id="tool-insert-image" data-tool="insert-image" title="Place Image (I)">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="3" width="18" height="18" rx="3"/>
+            <circle cx="8.5" cy="8.5" r="1.5"/>
+            <path d="M21 15l-5-5L5 21"/>
+          </svg>
+        </button>
+      </div>
+
+      <div class="palette-divider"></div>
+
+      <!-- Group: TRANSFORM & SYMMETRY -->
+      <div class="toolbar-section">
+        <button class="tool-icon-btn" id="tool-rotate" data-tool="rotate" title="Rotate (R)">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 12a9 9 0 1 1-9-9c2.5 0 4.8 1 6.4 2.7L21 8"/>
+            <path d="M21 3v5h-5"/>
+          </svg>
+        </button>
+        <button class="tool-icon-btn" id="tool-mirror" data-tool="mirror" title="Mirror (O)">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="12" y1="2" x2="12" y2="22" stroke-dasharray="2 2"/>
+            <path d="M4 18V6l6 6z"/>
+            <path d="M20 18V6l-6 6z"/>
+          </svg>
+        </button>
+      </div>
+
+      <div class="palette-divider"></div>
+
+      <!-- Group: VIEW & NAVIGATION -->
+      <div class="toolbar-section">
+        <button class="tool-icon-btn" id="tool-hand" data-tool="hand" title="Hand (H / Space)">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M18 11V6a2 2 0 0 0-4 0v5"/>
+            <path d="M14 10V4a2 2 0 0 0-4 0v7"/>
+            <path d="M10 10.5V6a2 2 0 0 0-4 0v8"/>
+            <path d="M18 8a2 2 0 1 1 4 0v7a8 8 0 0 1-8 8h-2c-2.8 0-4.5-.9-6-2.3L2.5 17a1.5 1.5 0 0 1 2.2-2L7 17"/>
+          </svg>
+        </button>
+        <button class="tool-icon-btn" id="tool-zoom" data-tool="zoom" title="Zoom (Z / Ctrl+0)">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="7"/>
+            <path d="M21 21l-4.35-4.35"/>
+          </svg>
+        </button>
+        <button class="tool-icon-btn" id="tool-virtual-ruler" data-tool="virtual-ruler" title="Artisan Ruler (R)">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21.3 8.7L8.7 21.3c-.4.4-1 .4-1.4 0L2.7 16.7c-.4-.4-.4-1 0-1.4L15.3 2.7c.4-.4 1-.4 1.4 0l4.6 4.6c.4.4.4 1 0 1.4z"/>
+            <path d="M6.5 13.5l2 2M9.5 10.5l3 3M12.5 7.5l2 2M15.5 4.5l3 3"/>
+          </svg>
+        </button>
+      </div>
+
+      <div class="palette-divider"></div>
+
+      <!-- Group: COLOR SWATCHES -->
+      <div class="toolbar-swatches-box" title="Thread Stroke &amp; Fabric Canvas Colors">
+        <div class="swatch-frame stroke-active" id="swatch-stroke-box" title="Thread Color (Click to change)">
+          <input type="color" id="input-tool-stitch-color" value="#FFFFFF" class="swatch-input">
+        </div>
+        <div class="swatch-frame fill-box" id="swatch-fill-box" title="Fabric / Canvas Color">
+          <input type="color" id="input-tool-bg-color" value="#121316" class="swatch-input">
+        </div>
+        <button class="btn-swatch-default" id="btn-swatch-default" title="Reset Default Colors (Shortcut: D)">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/>
+            <path d="M3 3v5h5"/>
+          </svg>
+        </button>
+      </div>
+      <!-- Quick Fabric Presets Row -->
+      <div class="swatch-presets-row" id="swatch-presets-row" title="Quick Fabric Presets">
+        <button class="swatch-preset-dot active" data-bg="#121316" data-stitch="#FFFFFF" title="Obsidian Dark Fabric (#121316)" style="background: #121316;"></button>
+        <button class="swatch-preset-dot" data-bg="#0F172A" data-stitch="#FFFFFF" title="Traditional Indigo Fabric (#0F172A)" style="background: #0F172A;"></button>
+        <button class="swatch-preset-dot" data-bg="#FFFFFF" data-stitch="#0F172A" title="Clean White Fabric (#FFFFFF)" style="background: #FFFFFF;"></button>
+      </div>
+
+      <div class="palette-bottom">
+        <button class="tool-icon-btn danger-hover" id="btn-clear-canvas" title="Reset / Clear Canvas Stitches">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 6h18"/>
+            <path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+            <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/>
+          </svg>
+        </button>
+      </div>
+    </aside>
+
+    <!-- Center Canvas Stage with Bounded A2 Artboard (Image 1 Benchmark) -->
+    <main class="canvas-stage" id="canvas-stage">
+      <canvas id="main-cad-canvas"></canvas>
+
+      <!-- Floating Shape Picker HUD for Bounded Lab Tool (M) -->
+      <div class="floating-shape-picker hidden" id="shape-picker-hud">
+        <span class="shape-picker-title">Lab Shape:</span>
+        <button class="shape-type-btn active" data-shape="rect" title="Box / Rectangle Lab">▢ Box</button>
+        <button class="shape-type-btn" data-shape="triangle" title="Triangle Lab">△ Triangle</button>
+        <button class="shape-type-btn" data-shape="circle" title="Round / Circle Lab">○ Round</button>
+        <button class="shape-type-btn" data-shape="hexagon" title="Hexagon Lab">⬡ Hexagon</button>
+        <button class="shape-type-btn" data-shape="diamond" title="Diamond Lab">◇ Diamond</button>
+      </div>
+
+      <!-- Floating Radial Symmetry HUD for Curve & Arc Engine (C / Shift+C) -->
+      <div class="floating-shape-picker hidden" id="curve-symmetry-hud">
+        <span class="shape-picker-title">Symmetry:</span>
+        <button class="shape-type-btn active" data-symmetry="1" title="1x Standard (Single Stroke)">1x Off</button>
+        <button class="shape-type-btn" data-symmetry="3" title="3-Fold Radial Symmetry (Folding Fans / Kikko ni Mitsu-Ogi)">3x Fans</button>
+        <button class="shape-type-btn" data-symmetry="4" title="4-Fold Radial Symmetry (Quad Mirror)">4x Quad</button>
+        <button class="shape-type-btn" data-symmetry="5" title="5-Fold Radial Symmetry (Sakura 5-Petal Flower)">5x Sakura</button>
+        <button class="shape-type-btn" data-symmetry="6" title="6-Fold Radial Symmetry (Hexagonal Rosette)">6x Hex</button>
+        <button class="shape-type-btn" data-symmetry="8" title="8-Fold Radial Symmetry (Octagonal Mandala)">8x Oct</button>
+      </div>
+
+      <!-- Floating Bottom HUD -->
+      <div class="stage-hud hud-left">
+        <span class="hud-tag" id="hud-zoom">Zoom: 35%</span>
+        <span class="hud-tag" id="hud-dimension">420 × 594 mm (A2)</span>
+        <span class="hud-tag highlight" id="hud-active-shape">Active: Block B2 (Center)</span>
+      </div>
+
+      <!-- Floating Interactive Minimap HUD Card -->
+      <div class="minimap-card hidden" id="canvas-minimap-card">
+        <div class="minimap-header">
+          <span class="minimap-title">NAVIGATOR</span>
+          <button class="minimap-close" id="btn-close-minimap" title="Close Navigator">✕</button>
+        </div>
+        <canvas id="minimap-canvas" width="116" height="116"></canvas>
+      </div>
+
+      <div class="stage-hud hud-right">
+        <button class="hud-btn" id="btn-toggle-minimap" title="Toggle Navigator Minimap (N)">🗺</button>
+        <button class="hud-btn" id="btn-zoom-out" title="Zoom Out (−)">−</button>
+        <button class="hud-btn" id="btn-zoom-reset" title="Fit A2 Artboard to Screen (Ctrl+0)">100%</button>
+        <button class="hud-btn" id="btn-zoom-in" title="Zoom In (+)">+</button>
+        <button class="hud-btn" id="btn-fit-screen" title="Fit Artboard to Screen (⛶)">⛶</button>
+      </div>
+    </main>
+
+    <!-- Right Properties & Inspector Panel (Adobe Illustrator Standard - Image 1) -->
+    <aside class="right-inspector" id="right-inspector">
+      <nav class="inspector-tabs">
+        <button class="insp-tab active" data-tab="properties" title="Document Setup, Ruler &amp; Grids, Selection">Properties</button>
+        <button class="insp-tab" data-tab="artlab" title="Art Lab: Screen Scale Calibrator, 1/4 Quadrants &amp; Lightbox">Art Lab</button>
+        <button class="insp-tab" data-tab="layers" title="Illustrator Layers (Base Grid, Main Motif, Borders, Notes)">Layers</button>
+        <button class="insp-tab" data-tab="shapes" title="3x3 Master Blocks &amp; Sub-Labs (Image 3)">Shapes</button>
+        <button class="insp-tab" data-tab="patterns" title="Authentic Pattern Library">Library</button>
+        <button class="insp-tab" data-tab="blueprint" title="Production Blueprint &amp; 1:1 Print">Specs</button>
+      </nav>
+
+      <div class="inspector-body">
+        <!-- 1. Properties Tab (Image 1 Standard) -->
+        <section class="insp-pane active" id="pane-properties">
+          <!-- Document Section (Collapsible Accordion) -->
+          <div class="collapsible-header" id="header-doc-setup" data-target="wrapper-doc-setup">
+            <h4>
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/></svg>
+              Document Setup
+            </h4>
+            <button class="btn-collapse-toggle" title="Toggle Document Setup">
+              <svg class="section-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+            </button>
+          </div>
+          <div class="collapsible-wrapper" id="wrapper-doc-setup">
+            <div class="collapsible-inner">
+              <div class="setting-row">
+                <label>Units</label>
+                <div class="pill-group sm">
+                  <button class="pill-btn sm active" id="btn-unit-in">in</button>
+                  <button class="pill-btn sm" id="btn-unit-cm">cm</button>
+                  <button class="pill-btn sm" id="btn-unit-mm">mm</button>
+                </div>
+              </div>
+
+              <button class="btn-secondary btn-sm w-100 mt-1" id="btn-fit-artboard-screen">
+                ⛶ Fit to Window (Ctrl+0)
+              </button>
+              <button class="btn-secondary btn-sm w-100 mt-1" id="btn-reset-canvas-settings" title="Reset Fabric &amp; Thread Colors, Master Pitch &amp; Grids to Default">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 4px; vertical-align: -1px;">
+                  <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/>
+                  <path d="M3 3v5h5"/>
+                </svg>
+                Reset Settings
+              </button>
+            </div>
+          </div>
+
+          <div class="pane-divider"></div>
+
+          <!-- Grid & Guides Section -->
+          <div class="collapsible-header" id="header-grid-setup" data-target="wrapper-grid-setup">
+            <h4>
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+              Grid &amp; Guides
+            </h4>
+            <button class="btn-collapse-toggle" title="Toggle Grid & Guides">
+              <svg class="section-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+            </button>
+          </div>
+          <div class="collapsible-wrapper" id="wrapper-grid-setup">
+            <div class="collapsible-inner">
+              <div class="btn-grid-3 mb-2">
+                <button class="btn-secondary btn-sm active" id="btn-toggle-main-grid" title="Toggle Main Grid">
+                  Main: ON
+                </button>
+                <button class="btn-secondary btn-sm active" id="btn-toggle-sub-grid" title="Toggle Sub-Grid">
+                  Sub: ON
+                </button>
+                <button class="btn-secondary btn-sm" id="btn-toggle-micro-grid" title="Toggle Micro-Grid">
+                  Micro: OFF
+                </button>
+              </div>
+
+              <!-- Tier 1: Master Square Pitch -->
+              <div class="setting-row">
+                <label>Grid Pitch</label>
+                <div class="range-wrap">
+                  <input type="range" id="input-main-pitch" min="0.5" max="3.0" value="1.0" step="0.05">
+                  <span class="range-val" id="val-main-pitch">1.00 in</span>
+                </div>
+              </div>
+
+              <!-- Quick Pitch Presets -->
+              <div class="pitch-presets-row" id="pitch-presets-row">
+                <button class="pitch-preset-pill active" data-pitch-in="1.0" data-pitch-cm="2.0">1.00"</button>
+                <button class="pitch-preset-pill" data-pitch-in="1.5" data-pitch-cm="3.0">1.50"</button>
+                <button class="pitch-preset-pill" data-pitch-in="2.0" data-pitch-cm="4.0">2.00"</button>
+                <button class="pitch-preset-pill" data-pitch-in="3.0" data-pitch-cm="5.0">3.00"</button>
+              </div>
+
+              <!-- Tier 2: Sub-Grid Partitions (Collapsible Card) -->
+              <div class="grid-divisions-card mt-2" id="card-subgrid">
+                <div class="subdiv-title-row collapsible-trigger" id="trigger-subgrid" data-target="wrapper-subgrid">
+                  <div class="subdiv-title-left">
+                    <span class="subgrid-headline">Subdivisions</span>
+                    <span class="subgrid-calc-badge" id="val-subgrid-calc-size">0.33 in</span>
+                  </div>
+                  <svg class="card-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+                </div>
+                <div class="collapsible-wrapper" id="wrapper-subgrid">
+                  <div class="collapsible-inner pt-1">
+                    <div class="subdiv-row mt-1">
+                      <span class="subdiv-label">Horizontal:</span>
+                      <div class="counter-box">
+                        <button class="btn-counter" id="btn-subdiv-h-minus" title="Reduce Horizontal Subdivisions">−</button>
+                        <span class="counter-value" id="val-subdiv-h">3</span>
+                        <button class="btn-counter" id="btn-subdiv-h-plus" title="Add Horizontal Subdivisions">+</button>
+                      </div>
+                    </div>
+                    <div class="subdiv-row mt-1">
+                      <span class="subdiv-label">Vertical:</span>
+                      <div class="counter-box">
+                        <button class="btn-counter" id="btn-subdiv-v-minus" title="Reduce Vertical Subdivisions">−</button>
+                        <span class="counter-value" id="val-subdiv-v">3</span>
+                        <button class="btn-counter" id="btn-subdiv-v-plus" title="Add Vertical Subdivisions">+</button>
+                      </div>
+                    </div>
+                    <span class="subgrid-note" id="subgrid-note">3×3 = 9 cells (0.33 in)</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Tier 3: Micro-Grid (Collapsible Card - Default OFF / Hidden) -->
+              <div class="grid-divisions-card mt-2" id="card-microgrid">
+                <div class="subdiv-title-row collapsible-trigger is-collapsed" id="trigger-microgrid" data-target="wrapper-microgrid">
+                  <div class="subdiv-title-left">
+                    <span class="subgrid-headline">Micro-Grid</span>
+                    <span class="subgrid-calc-badge" id="val-microgrid-calc-size">0.17 in</span>
+                  </div>
+                  <svg class="card-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+                </div>
+                <div class="collapsible-wrapper collapsed" id="wrapper-microgrid">
+                  <div class="collapsible-inner pt-1">
+                    <div class="subdiv-row mt-1">
+                      <span class="subdiv-label">Micro H:</span>
+                      <div class="counter-box">
+                        <button class="btn-counter" id="btn-microdiv-h-minus" title="Reduce Horizontal Micro-divisions">−</button>
+                        <span class="counter-value" id="val-microdiv-h">2</span>
+                        <button class="btn-counter" id="btn-microdiv-h-plus" title="Add Horizontal Micro-divisions">+</button>
+                      </div>
+                    </div>
+                    <div class="subdiv-row mt-1">
+                      <span class="subdiv-label">Micro V:</span>
+                      <div class="counter-box">
+                        <button class="btn-counter" id="btn-microdiv-v-minus" title="Reduce Vertical Micro-divisions">−</button>
+                        <span class="counter-value" id="val-microdiv-v">2</span>
+                        <button class="btn-counter" id="btn-microdiv-v-plus" title="Add Vertical Micro-divisions">+</button>
+                      </div>
+                    </div>
+                    <span class="subgrid-note" id="microgrid-note">2×2 = 4 cells (0.17 in)</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="setting-row mt-2">
+                <label>Grid Opacity</label>
+                <div class="range-wrap">
+                  <input type="range" id="input-grid-opacity" min="0.04" max="0.30" step="0.01" value="0.12">
+                  <span class="range-val" id="val-grid-opacity">12%</span>
+                </div>
+              </div>
+
+              <div class="setting-row">
+                <label>Anchor Dots</label>
+                <div class="pill-group sm">
+                  <button class="pill-btn sm active" id="btn-dots-show">Show</button>
+                  <button class="pill-btn sm" id="btn-dots-hide">Hide</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="pane-divider"></div>
+
+          <!-- Selection & Batch Actions Section (Marquee V) -->
+          <div class="collapsible-header" id="header-selection-setup" data-target="wrapper-selection-setup">
+            <h4>
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3l7 18 3-7 7-3L3 3z"/></svg>
+              Selection
+            </h4>
+            <div style="display:flex; align-items:center; gap:6px;">
+              <span class="badge-sm" id="selection-count-badge">0 Selected</span>
+              <button class="btn-collapse-toggle" title="Toggle Selection Inspector">
+                <svg class="section-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+              </button>
+            </div>
+          </div>
+          <div class="collapsible-wrapper" id="wrapper-selection-setup">
+            <div class="collapsible-inner">
+              <!-- Quick Batch Actions -->
+              <div class="selection-actions-box" id="selection-actions-box">
+                <button class="btn-secondary btn-sm" id="btn-sel-duplicate" disabled title="Duplicate (Ctrl+D)">
+                  ⎘ Duplicate
+                </button>
+                <div class="rotate-angles-group" style="display:flex; gap:3px;">
+                  <button class="btn-secondary btn-sm" id="btn-sel-rot-45" disabled title="Rotate 45°">↻ 45°</button>
+                  <button class="btn-secondary btn-sm" id="btn-sel-rot-90" disabled title="Rotate 90°">↻ 90°</button>
+                  <button class="btn-secondary btn-sm" id="btn-sel-rot-180" disabled title="Rotate 180°">↻ 180°</button>
+                  <button class="btn-secondary btn-sm" id="btn-sel-mirror" disabled title="Flip Horizontally (O)">⇄ Flip</button>
+                </div>
+                <button class="btn-secondary btn-sm danger-hover" id="btn-sel-delete" disabled title="Delete (Del)">
+                  🗑 Delete
+                </button>
+              </div>
+
+              <!-- Figma Boolean Operations Row (SS 2) -->
+              <div class="selection-sub-heading mt-2">
+                <span>BOOLEAN OPERATIONS</span>
+              </div>
+              <div class="boolean-icon-bar" id="selection-boolean-bar">
+                <button class="bool-btn-sm" id="btn-insp-bool-union" disabled title="Union (Alt+Shift+U)">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M4 4h9v5h7v11H9v-5H4V4z"/></svg>
+                  <span>Union</span>
+                </button>
+                <button class="bool-btn-sm" id="btn-insp-bool-subtract" disabled title="Subtract (Alt+Shift+S)">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M4 4h10v5h-5v5H4V4z"/></svg>
+                  <span>Subtract</span>
+                </button>
+                <button class="bool-btn-sm" id="btn-insp-bool-intersect" disabled title="Intersect (Alt+Shift+I)">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><rect x="8" y="8" width="8" height="8" rx="1"/></svg>
+                  <span>Intersect</span>
+                </button>
+                <button class="bool-btn-sm" id="btn-insp-bool-exclude" disabled title="Exclude (Alt+Shift+E)">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M4 4h10v5H9v5H4V4zm11 5h5v11H9v-5h5V9z"/></svg>
+                  <span>Exclude</span>
+                </button>
+                <button class="bool-btn-sm" id="btn-insp-bool-flatten" disabled title="Flatten (Alt+Shift+F)">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+                  <span>Flatten</span>
+                </button>
+              </div>
+
+              <!-- Convert to Bounded Lab / Work Area -->
+              <div class="selection-sub-heading mt-2">
+                <span>BOUNDED LAB</span>
+              </div>
+              <div class="selection-actions-box mt-1">
+                <button class="btn-action-primary w-100" id="btn-sel-convert-lab" disabled title="Convert Selected Stitches into a Bounded Work Area">
+                  ✨ Convert to Lab
+                </button>
+                <button class="btn-secondary btn-sm w-100 mt-1" id="btn-sel-toggle-constraint" disabled title="Constrain drawing strictly inside this shape">
+                  🔒 Constrain to Lab: OFF
+                </button>
+              </div>
+
+              <!-- Grouping & Hierarchy -->
+              <div class="selection-sub-heading mt-2">
+                <span>GROUPING</span>
+              </div>
+              <div class="selection-actions-box mt-1">
+                <button class="btn-secondary btn-sm" id="btn-sel-group" disabled title="Group (Ctrl+G)">
+                  Group
+                </button>
+                <button class="btn-secondary btn-sm" id="btn-sel-ungroup" disabled title="Ungroup (Ctrl+Shift+G)">
+                  Ungroup
+                </button>
+              </div>
+
+              <div class="setting-row mt-2">
+                <label>Move to Layer</label>
+                <select id="select-selection-layer" class="cad-select sm" disabled>
+                  <!-- Populated from LayerManager -->
+                </select>
+              </div>
+              <button class="btn-secondary btn-sm w-100 mt-1" id="btn-apply-move-layer" disabled title="Move Selected Items to Chosen Layer">
+                Move to Layer
+              </button>
+            </div>
+          </div>
+        </section>
+
+        <!-- 2. Art Lab Tab (Physical Screen Tracing, Hardware Scale & Quadrants) -->
+        <section class="insp-pane" id="pane-artlab">
+          <div class="pane-headline">
+            <h4>Art Lab • Screen Tracing</h4>
+            <span class="badge-sm" id="badge-artlab-scale">1:1 Physical</span>
+          </div>
+
+          <!-- Card 1: 1:1 Physical Scale Calibrator (Hardware PPI) -->
+          <div class="artlab-card">
+            <div class="artlab-card-title">
+              <span>Physical Scale Calibrator</span>
+              <span class="badge-sm" id="val-screen-ppi">141.2 PPI</span>
+            </div>
+            <p class="artlab-desc">Hold an actual ruler against your screen glass. Adjust slider until on-screen bar matches 3.0 inches.</p>
+            
+            <div class="ruler-calib-track">
+              <div class="ruler-calib-bar" id="ruler-calib-bar">3.0 in</div>
+            </div>
+
+            <div class="setting-row mt-1">
+              <label>Display PPI</label>
+              <div class="range-wrap">
+                <input type="range" id="input-screen-ppi" min="80" max="240" step="0.5" value="141.2">
+              </div>
+            </div>
+
+            <div style="display:flex; gap:4px; margin-top:4px;">
+              <button class="btn-preset-ppi" data-ppi="141.2">15.6" (141)</button>
+              <button class="btn-preset-ppi" data-ppi="157">14" (157)</button>
+              <button class="btn-preset-ppi" data-ppi="96">Monitor (96)</button>
+            </div>
+
+            <button class="btn-secondary btn-sm w-100 mt-2" id="btn-lock-real-scale">
+              🔒 Lock 1:1 Real Physical Scale
+            </button>
+          </div>
+
+          <!-- Card 2: 1/4 Cushion Quadrant Tracing Wizard -->
+          <div class="artlab-card mt-2">
+            <div class="artlab-card-title">
+              <span>1/4 Cushion Quadrants</span>
+              <span class="badge-sm">16"×16" → 8"×8"</span>
+            </div>
+            <p class="artlab-desc">Trace large cushions quarter-by-quarter on compact laptop screens with zero misalignment.</p>
+
+            <div class="quadrant-selector-grid mt-1">
+              <button class="btn-quadrant" data-quad="1"><span>Q1 ↖</span><small>Top-Left</small></button>
+              <button class="btn-quadrant" data-quad="2"><span>Q2 ↗</span><small>Top-Right</small></button>
+              <button class="btn-quadrant" data-quad="3"><span>Q3 ↙</span><small>Bottom-Left</small></button>
+              <button class="btn-quadrant" data-quad="4"><span>Q4 ↘</span><small>Bottom-Right</small></button>
+            </div>
+
+            <div style="display:flex; gap:6px; margin-top:6px;">
+              <button class="btn-secondary btn-sm flex-1" id="btn-quad-full">Full 16×16</button>
+              <button class="btn-secondary btn-sm flex-1" id="btn-quad-rotate">↻ Rotate 90°</button>
+            </div>
+
+            <div class="setting-row mt-2">
+              <label>Vernier Sightline Reticle</label>
+              <div class="pill-group sm">
+                <button class="pill-btn sm active" id="btn-crosshair-on">Bullseye</button>
+                <button class="pill-btn sm" id="btn-crosshair-off">OFF</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Card: Live Quadrant & Radial Symmetry Engine -->
+          <div class="artlab-card mt-2">
+            <div class="artlab-card-title">
+              <span>Live Symmetry Tracing</span>
+              <span class="badge-sm" id="badge-symmetry-status">Symmetry: OFF</span>
+            </div>
+            <p class="artlab-desc">Draw once in 1 corner — automatically mirrors live across all 4 cushion quadrants.</p>
+            <button class="btn-secondary btn-sm w-100 mt-1" id="btn-toggle-symmetry">
+              ✨ 4-Way Symmetry: OFF
+            </button>
+          </div>
+
+          <!-- Card: Hardware Trace Lock (Palm & Glass Rejection) -->
+          <div class="artlab-card mt-2">
+            <div class="artlab-card-title">
+              <span>Hardware Trace Lock</span>
+              <span class="badge-sm" id="badge-trace-lock-state">Touch Active</span>
+            </div>
+            <p class="artlab-desc">Freezes all canvas touch/pointer events and keeps screen awake while resting heavy crystal glass and hands.</p>
+            <button class="btn-secondary btn-sm w-100 mt-1" id="btn-artlab-trace-lock">
+              🔒 Trace Lock: OFF
+            </button>
+          </div>
+
+          <!-- Card 3: Fabric Light-Penetration Optics -->
+          <div class="artlab-card mt-2">
+            <div class="artlab-card-title">
+              <span>Fabric Light Penetration</span>
+              <span class="badge-sm" id="val-airgap-boost">1.6× Boost</span>
+            </div>
+            <p class="artlab-desc">Optical presets tuned for fabric weave absorption and crystal glass reflection.</p>
+
+            <div class="fabric-presets-row mt-1">
+              <button class="btn-fabric-preset" data-preset="light" title="White / Raw Cotton Fabric">
+                <div class="fabric-dot-preview" style="background:#FFFFFF;"></div>
+                <span>Light</span>
+              </button>
+              <button class="btn-fabric-preset active" data-preset="indigo" title="Indigo Denim (Neon Punch / Zero Glare)">
+                <div class="fabric-dot-preview" style="background:#0F172A; border-color:#00FFFF;"></div>
+                <span>Indigo</span>
+              </button>
+              <button class="btn-fabric-preset" data-preset="photopic-lime" title="555nm Photopic Lime Neon (Peak eye sensitivity for thick denim)">
+                <div class="fabric-dot-preview" style="background:#000000; border-color:#39FF14;"></div>
+                <span>555nm Lime</span>
+              </button>
+              <button class="btn-fabric-preset" data-preset="black" title="Jet Black Fabric (Max Lumens)">
+                <div class="fabric-dot-preview" style="background:#000000; border-color:#FFFFFF;"></div>
+                <span>Black</span>
+              </button>
+            </div>
+
+            <div class="setting-row mt-2">
+              <label>Air-Gap Line Boost</label>
+              <div class="range-wrap">
+                <input type="range" id="input-airgap-boost" min="1.0" max="4.0" step="0.1" value="1.6">
+              </div>
+            </div>
+          </div>
+
+          <!-- Card 4: Interactive Artisan Ruler & Protractor -->
+          <div class="artlab-card mt-2">
+            <div class="artlab-card-title">
+              <span>Virtual Artisan Ruler</span>
+              <span class="badge-sm" id="badge-ruler-state">CM + INCH</span>
+            </div>
+            <p class="artlab-desc">Dual-scale cm/inch physical ruler with 360° protractor dial. Rotate with Ctrl+Wheel or drag rotary knob.</p>
+            
+            <button class="btn-secondary btn-sm w-100" id="btn-artlab-toggle-ruler">
+              📐 Toggle Artisan Ruler (R)
+            </button>
+
+            <div class="setting-row mt-1">
+              <label>Pinpoint Micro-Zoom</label>
+              <div style="display:flex; gap:4px; align-items:center;">
+                <button class="btn-micro-nudge" id="btn-artlab-zoom-minus" title="Micro-Nudge -0.2%">▼ 0.2%</button>
+                <button class="btn-micro-nudge" id="btn-artlab-zoom-plus" title="Micro-Nudge +0.2%">▲ 0.2%</button>
+                <button class="btn-micro-nudge" id="btn-artlab-zoom-step-minus" title="Step -1%">−1%</button>
+                <button class="btn-micro-nudge" id="btn-artlab-zoom-step-plus" title="Step +1%">+1%</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Card 5: Dedicated Lightbox Launch Button -->
+          <button class="btn-primary w-100 mt-2" id="btn-launch-lightbox-mode" style="background: linear-gradient(135deg, #0EA5E9, #0284C7); font-weight:700; padding:10px; border-radius:6px; box-shadow: 0 4px 14px rgba(14, 165, 233, 0.35);">
+            ⚡ Enter Fullscreen Lightbox (F11)
+          </button>
+        </section>
+
+        <!-- 3. Layers Panel (Adobe Illustrator Standard) -->
+        <section class="insp-pane" id="pane-layers">
+          <div class="pane-headline">
+            <h4>Layers</h4>
+            <span class="badge-sm" id="layer-count-badge">4 Layers</span>
+          </div>
+
+          <div class="layers-container-box" id="layers-container-box">
+            <!-- Rendered by LayerManager.js -->
+          </div>
+
+          <div class="layers-footer-toolbar">
+            <button class="btn-secondary btn-sm" id="btn-add-layer" title="Create New Vector Layer">
+              + Layer
+            </button>
+            <button class="btn-secondary btn-sm" id="btn-insert-image" title="Insert Reference Image Layer">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+              + Image
+            </button>
+            <button class="btn-secondary btn-sm" id="btn-dup-layer" title="Duplicate Layer">
+              ⎘ Duplicate
+            </button>
+            <button class="btn-secondary btn-sm danger-hover" id="btn-del-layer" title="Delete Layer">
+              🗑 Delete
+            </button>
+          </div>
+          <input type="file" id="input-file-image" accept="image/*" style="display:none;">
+        </section>
+
+        <!-- 3. Cushion Layout Architecture & Shapes Tab -->
+        <section class="insp-pane" id="pane-shapes">
+          <div class="pane-headline">
+            <h4>Block Layout</h4>
+            <span class="badge-sm" id="shape-count-badge">9 Blocks</span>
+          </div>
+
+          <div class="setting-row">
+            <label>Template</label>
+            <select id="select-cushion-template" class="cad-select">
+              <option value="3x3" selected>3×3 Nine-Square Grid (9 Blocks)</option>
+              <option value="4x4">4×4 Sampler Grid (16 Blocks)</option>
+              <option value="2x2">2×2 Quadrant Grid (4 Blocks)</option>
+              <option value="l-frame">Concentric L-Frame (Medallion + Border)</option>
+              <option value="3-band">3-Band Striped (Stripes)</option>
+              <option value="diamond">45° Diamond On-Point (Diamond + Corners)</option>
+            </select>
+          </div>
+
+          <div class="green-line-toggle-box">
+            <button class="btn-green-line" id="btn-toggle-green-sublab" title="Toggle Sub-Lab Block Guides">
+              <span class="green-indicator"></span> Block Guides
+            </button>
+          </div>
+
+          <div class="vertical-shape-list" id="vertical-shape-list">
+            <!-- Rendered by SubLabManager.js: A1..C3 with rotation pills -->
+          </div>
+
+          <div class="shape-action-footer">
+            <button class="btn-action-sm w-100" id="btn-paste-pattern-to-shape" title="Paste Pattern into Active Block">
+              Paste to Block
+            </button>
+            <button class="btn-action-sm w-100 mt-2" id="btn-fill-all-shapes" title="Fill All Partition Blocks with Selected Pattern">
+              Fill All Blocks
+            </button>
+            <button class="btn-action-sm w-100 mt-2" id="btn-clear-active-shape" title="Clear Stitches inside Active Block">
+              Clear Block
+            </button>
+          </div>
+        </section>
+
+        <!-- 3. Patterns Tab (10 Motifs) -->
+        <section class="insp-pane" id="pane-patterns">
+          <div class="pane-headline">
+            <h4>Grid-Locked Patterns</h4>
+            <span class="badge-sm" id="badge-pattern-count">0 Motifs</span>
+          </div>
+
+          <div class="patterns-card-grid" id="patterns-card-grid">
+            <!-- Rendered by PatternRegistry.js -->
+          </div>
+
+          <div class="pane-divider"></div>
+
+          <div class="pane-headline">
+            <h4>Pattern Settings</h4>
+          </div>
+
+          <div class="setting-row">
+            <label>Line Style</label>
+            <div class="pill-group sm">
+              <button class="pill-btn sm active" id="style-dashed">Dashed</button>
+              <button class="pill-btn sm" id="style-solid">Solid</button>
+            </div>
+          </div>
+
+          <div class="setting-row mt-2">
+            <label>Tessellation</label>
+            <div class="pill-group sm">
+              <button class="pill-btn sm active" id="pat-mode-repeat" title="Tile exact number of core motifs">Core Repeats</button>
+              <button class="pill-btn sm" id="pat-mode-fill" title="Auto-fill entire active shape or artboard">Fill Boundary</button>
+            </div>
+          </div>
+
+          <div class="setting-row mt-2" id="row-repeat-x">
+            <label>Repeat Horizontal (X)</label>
+            <div class="stepper-wrap">
+              <button class="stepper-btn" id="btn-rep-x-dec" title="Decrease horizontal repeats">−</button>
+              <span class="stepper-val" id="val-repeat-x">2</span>
+              <button class="stepper-btn" id="btn-rep-x-inc" title="Increase horizontal repeats">+</button>
+            </div>
+          </div>
+
+          <div class="setting-row mt-1" id="row-repeat-y">
+            <label>Repeat Vertical (Y)</label>
+            <div class="stepper-wrap">
+              <button class="stepper-btn" id="btn-rep-y-dec" title="Decrease vertical repeats">−</button>
+              <span class="stepper-val" id="val-repeat-y">2</span>
+              <button class="stepper-btn" id="btn-rep-y-inc" title="Increase vertical repeats">+</button>
+            </div>
+          </div>
+        </section>
+
+        <!-- 4. Blueprint & Specs Tab -->
+        <section class="insp-pane" id="pane-blueprint">
+          <div class="pane-headline">
+            <h4>Production Blueprint</h4>
+          </div>
+
+          <div class="metrics-cards-2x2">
+            <div class="m-card">
+              <span class="m-num" id="spec-stitch-count">0</span>
+              <span class="m-lbl">Stitches</span>
+            </div>
+            <div class="m-card">
+              <span class="m-num" id="spec-thread-meters">0.0m</span>
+              <span class="m-lbl">Thread Req.</span>
+            </div>
+            <div class="m-card">
+              <span class="m-num" id="spec-skeins">0</span>
+              <span class="m-lbl">Skeins (40m)</span>
+            </div>
+            <div class="m-card">
+              <span class="m-num" id="spec-hours">0.0h</span>
+              <span class="m-lbl">Est. Time</span>
+            </div>
+            <div class="m-card">
+              <span class="m-num" id="spec-spi">~7.3</span>
+              <span class="m-lbl">SPI (Pitch)</span>
+            </div>
+            <div class="m-card">
+              <span class="m-num" id="spec-cut-size">A2</span>
+              <span class="m-lbl">Cut Size</span>
+            </div>
+          </div>
+
+          <div class="pane-divider"></div>
+
+          <!-- Cushion Cutting Schedule (0.5" Seam Margin) -->
+          <div class="collapsible-header mt-2" id="header-cutting-schedule" data-target="wrapper-cutting-schedule">
+            <h4>
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+              Cutting Schedule (0.5" Seam)
+            </h4>
+            <button class="btn-collapse-toggle" title="Toggle Cutting Schedule">
+              <svg class="section-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+            </button>
+          </div>
+          <div class="collapsible-wrapper" id="wrapper-cutting-schedule">
+            <div class="collapsible-inner">
+              <div class="cutting-schedule-table-wrap" id="cutting-schedule-container">
+                <!-- Dynamically rendered table -->
+              </div>
+            </div>
+          </div>
+
+          <div class="pane-divider mt-2"></div>
+
+          <button class="btn-primary w-100" id="btn-print-artisan-sheet">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9V2h12v7"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+            Print Artisan Spec Sheet
+          </button>
+          <button class="btn-secondary w-100 mt-2" id="btn-print-tiled-stencil">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+            Print 1:1 Tiled Stencil (4 Pages A4)
+          </button>
+
+          <div class="btn-stack mt-2">
+            <button class="btn-secondary w-100" id="btn-export-svg">Export Pure SVG (Laser/Vinyl)</button>
+            <button class="btn-secondary w-100" id="btn-export-png">Export 4K Ultra-HD PNG</button>
+            <button class="btn-secondary w-100" id="btn-save-sashiko">Save .sashiko Project</button>
+          </div>
+
+          <div class="embroidery-export-card mt-3">
+            <span class="subgrid-headline">Industrial CNC Embroidery Files</span>
+            <div class="btn-grid-2 mt-1">
+              <button class="btn-secondary btn-sm" id="btn-export-dst" title="Tajima Commercial Embroidery Machine (.DST)">
+                ⚡ Tajima (.DST)
+              </button>
+              <button class="btn-secondary btn-sm" id="btn-export-pes" title="Brother &amp; Bernina Machine Embroidery (.PES)">
+                🧵 Brother (.PES)
+              </button>
+            </div>
+            <span class="subgrid-note mt-1">Directly sew on Tajima, Brother, SWF, Barudan, Ricoma, Bernina &amp; Babylock machines</span>
+          </div>
+        </section>
+      </div>
+    </aside>
+  </div>
+
+  <!-- Fullscreen Lightbox Tracing Viewport Overlay -->
+  <div class="lightbox-overlay hidden" id="lightbox-overlay">
+    <canvas id="lightbox-canvas"></canvas>
+    
+    <!-- Top HUD Badge: Tracing Lock & Touch Freeze -->
+    <div class="lightbox-top-hud">
+      <span class="hud-pill">🔒 TRACING LOCKED • TOUCH PROTECTED</span>
+      <span class="hud-sub">Crystal Glass 1:1 Scale • Press <strong>ESC</strong> to exit</span>
+    </div>
+
+    <!-- Bottom HUD Controls Pill -->
+    <div class="lightbox-hud">
+      <!-- 1/4 Quadrants -->
+      <div class="hud-group" title="Select 1/4 Cushion Quadrant">
+        <span class="hud-label">Quadrant:</span>
+        <button class="hud-pill-btn btn-hud-quad" data-quad="1">Q1</button>
+        <button class="hud-pill-btn btn-hud-quad" data-quad="2">Q2</button>
+        <button class="hud-pill-btn btn-hud-quad" data-quad="3">Q3</button>
+        <button class="hud-pill-btn btn-hud-quad" data-quad="4">Q4</button>
+        <button class="hud-pill-btn btn-hud-quad active" data-quad="full">Full</button>
+        <button class="hud-pill-btn" id="btn-hud-rotate" title="Rotate View 90°">↻ 90°</button>
+      </div>
+
+      <div class="hud-divider"></div>
+
+      <!-- Fabric Optics Presets -->
+      <div class="hud-group" title="Fabric Light Absorption Presets">
+        <span class="hud-label">Fabric:</span>
+        <button class="hud-pill-btn btn-hud-fabric" data-preset="light" title="White / Raw Cotton Fabric">⚪ Light</button>
+        <button class="hud-pill-btn btn-hud-fabric active" data-preset="indigo" title="Indigo Denim (Neon Punch / Zero Glare)">⚫ Indigo</button>
+        <button class="hud-pill-btn btn-hud-fabric" data-preset="photopic-lime" title="555nm Photopic Lime (Max Photon Penetration)">🟢 Lime</button>
+        <button class="hud-pill-btn btn-hud-fabric" data-preset="black" title="Jet Black Fabric (Max Lumens)">⬛ Black</button>
+      </div>
+
+      <div class="hud-divider"></div>
+
+      <!-- Laser Registration Crosshair -->
+      <button class="hud-pill-btn active" id="btn-hud-crosshair" title="Toggle Laser Registration Crosshairs (+)">
+        + Crosshair
+      </button>
+
+      <!-- Virtual Artisan Ruler Toggle -->
+      <button class="hud-pill-btn" id="btn-hud-ruler" title="Toggle Virtual Artisan Ruler (R)">
+        📐 Ruler
+      </button>
+
+      <button class="btn-exit-lightbox" id="btn-exit-lightbox" title="Exit Fullscreen Lightbox (Esc)">
+        ✕ EXIT (ESC)
+      </button>
+    </div>
+  </div>
+
+  <!-- Hidden Container for Printable A4 Job Sheet -->
+  <div class="printable-artisan-sheet" id="printable-artisan-sheet"></div>
+
+  <!-- Figma Style Custom Context Menu for Reference Images -->
+  <div class="figma-context-menu hidden" id="image-context-menu">
+    <div class="ctx-menu-item" id="ctx-image-lock-toggle">
+      <svg class="ctx-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+      <span class="ctx-label" id="ctx-image-lock-label">🔒 Lock Image</span>
+      <span class="ctx-shortcut" style="font-size:10px;color:var(--text-muted);font-family:monospace;margin-left:auto;">Ctrl+2</span>
+    </div>
+    <div class="ctx-menu-item" id="ctx-toggle-blend">
+      <svg class="ctx-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="12" r="6"/><circle cx="15" cy="12" r="6"/></svg>
+      <span class="ctx-label" id="ctx-image-blend-label">Blueprint Blend: Multiply ⚡</span>
+    </div>
+    <div class="ctx-menu-divider"></div>
+    <div class="ctx-menu-item" id="ctx-bring-front">
+      <svg class="ctx-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12l7-7 7 7"/></svg>
+      <span class="ctx-label">Bring to Front</span>
+      <span class="ctx-shortcut" style="font-size:10px;color:var(--text-muted);font-family:monospace;margin-left:auto;">Ctrl+Shift+]</span>
+    </div>
+    <div class="ctx-menu-item" id="ctx-bring-forward">
+      <svg class="ctx-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 15l-6-6-6 6"/></svg>
+      <span class="ctx-label">Bring Forward</span>
+      <span class="ctx-shortcut" style="font-size:10px;color:var(--text-muted);font-family:monospace;margin-left:auto;">Ctrl+]</span>
+    </div>
+    <div class="ctx-menu-item" id="ctx-send-backward">
+      <svg class="ctx-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+      <span class="ctx-label">Send Backward</span>
+      <span class="ctx-shortcut" style="font-size:10px;color:var(--text-muted);font-family:monospace;margin-left:auto;">Ctrl+[</span>
+    </div>
+    <div class="ctx-menu-item" id="ctx-send-back">
+      <svg class="ctx-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 19V5M5 12l7 7 7-7"/></svg>
+      <span class="ctx-label">Send to Back</span>
+      <span class="ctx-shortcut" style="font-size:10px;color:var(--text-muted);font-family:monospace;margin-left:auto;">Ctrl+Shift+[</span>
+    </div>
+    <div class="ctx-menu-divider"></div>
+    <div class="ctx-menu-item" id="ctx-square-fit">
+      <svg class="ctx-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/></svg>
+      <span class="ctx-label">Constrain 1:1 Square</span>
+    </div>
+    <div class="ctx-menu-item" id="ctx-cushion-fit">
+      <svg class="ctx-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/></svg>
+      <span class="ctx-label">Fit to Cushion Fabric</span>
+    </div>
+    <div class="ctx-menu-divider"></div>
+    <div class="ctx-menu-item danger" id="ctx-delete-image">
+      <svg class="ctx-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18m-2 0v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+      <span class="ctx-label">Delete Image</span>
+    </div>
+  </div>
+
+  <!-- Illustrator-Style Isolation / Focus Mode Top Breadcrumb Bar -->
+  <div class="isolation-breadcrumb-hud hidden" id="isolation-breadcrumb-hud">
+    <button class="btn-exit-isolation" id="btn-exit-isolation" title="Exit Focus Mode (Esc)">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+      Exit Focus (Esc)
+    </button>
+    <div class="isolation-divider"></div>
+    <div class="isolation-badge">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#00FF7F" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M3 12h3m12 0h3M12 3v3m0 12v3"/></svg>
+      <span id="isolation-breadcrumb-label">Focusing: 12 Lines</span>
+    </div>
+  </div>
+
+  <!-- Figma Style Custom Context Menu for Canvas Stitches / Shapes -->
+  <div class="figma-context-menu hidden" id="canvas-context-menu">
+    <div class="ctx-menu-item" id="ctx-isolate-selection">
+      <svg class="ctx-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#00FF7F" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M3 12h3m12 0h3M12 3v3m0 12v3"/></svg>
+      <span class="ctx-label">🔍 Focus / Isolate Lines</span>
+      <span class="ctx-shortcut" style="font-size:10px;color:var(--text-muted);font-family:monospace;margin-left:auto;">Dbl-Click</span>
+    </div>
+    <div class="ctx-menu-item" id="ctx-lock-stitches">
+      <svg class="ctx-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+      <span class="ctx-label">🔒 Lock Selected Lines</span>
+      <span class="ctx-shortcut" style="font-size:10px;color:var(--text-muted);font-family:monospace;margin-left:auto;">Ctrl+2</span>
+    </div>
+    <div class="ctx-menu-item" id="ctx-unlock-all-stitches">
+      <svg class="ctx-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 9.9-1"/></svg>
+      <span class="ctx-label">🔓 Unlock All Lines</span>
+      <span class="ctx-shortcut" style="font-size:10px;color:var(--text-muted);font-family:monospace;margin-left:auto;">Ctrl+Alt+2</span>
+    </div>
+    <div class="ctx-menu-divider"></div>
+    <div class="ctx-menu-item" id="ctx-convert-to-lab">
+      <svg class="ctx-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+      <span class="ctx-label">✨ Convert to Bounded Lab</span>
+    </div>
+    <div class="ctx-menu-item" id="ctx-toggle-constraint">
+      <svg class="ctx-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+      <span class="ctx-label" id="ctx-constraint-label">🔒 Lock Drawing Inside Lab</span>
+    </div>
+    <div class="ctx-menu-divider"></div>
+    <div class="ctx-menu-item" id="ctx-copy-selection">
+      <svg class="ctx-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+      <span class="ctx-label">Copy (Ctrl+C)</span>
+    </div>
+    <div class="ctx-menu-item" id="ctx-paste-selection">
+      <svg class="ctx-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1" ry="1"/></svg>
+      <span class="ctx-label">Paste (Ctrl+V)</span>
+    </div>
+    <div class="ctx-menu-divider"></div>
+    <div class="ctx-menu-item" id="ctx-group-selection">
+      <svg class="ctx-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+      <span class="ctx-label">Group (Ctrl+G)</span>
+    </div>
+    <div class="ctx-menu-item danger" id="ctx-delete-selection">
+      <svg class="ctx-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18m-2 0v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+      <span class="ctx-label">Delete (Del)</span>
+    </div>
+  </div>
+
+  <!-- Figma Style Quick Command Palette Modal (Ctrl + K) -->
+  <div class="cmd-palette-backdrop hidden" id="cmd-palette-backdrop">
+    <div class="cmd-palette-dialog" id="cmd-palette-dialog">
+      <div class="cmd-palette-search-box">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="cmd-search-icon">
+          <circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+        </svg>
+        <input type="text" id="cmd-palette-input" placeholder="Type a command or search actions (e.g. Pen, 18x18, Grid, Lightbox)..." autocomplete="off" spellcheck="false">
+        <kbd class="cmd-esc-badge">ESC</kbd>
+      </div>
+      <div class="cmd-palette-results" id="cmd-palette-results"></div>
+      <div class="cmd-palette-footer">
+        <span><kbd>↑</kbd> <kbd>↓</kbd> Navigate</span>
+        <span><kbd>↵</kbd> Select</span>
+        <span><kbd>Ctrl+K</kbd> Toggle Palette</span>
+      </div>
+    </div>
+  <!-- Hardware Trace Lock Full-Screen Banner Indicator -->
+  <div id="trace-lock-banner" class="trace-lock-banner hidden">
+    <div class="trace-lock-pill">
+      <span class="lock-pulse">🔒</span>
+      <span class="lock-text"><strong>TRACE LOCK ACTIVE</strong> — Screen Touches & Pan Frozen for Glass Tracing</span>
+      <button id="btn-banner-unlock" class="btn-unlock-trace">Unlock (Esc)</button>
+    </div>
+  </div>
+
+  <!-- Main ES Module Bootstrap -->
+  <script type="module" src="src/main.js"></script>
+</body>
+</html>
